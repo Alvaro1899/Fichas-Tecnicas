@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <title>Ficha técnica</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    #container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-top: 0;
+    }
+    input[type="text"],
+    input[type="file"],
+    button {
+      margin-bottom: 10px;
+    }
+    input[type="text"],
+    input[type="file"],
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+<div id="container">
+    <h2>Ingrese texto:</h2>
+    <input type="text" id="texto1" placeholder="Habitaciones"><br>
+    <input type="text" id="texto2" placeholder="Baños"><br>
+    <input type="text" id="texto3" placeholder="Estacionamientos"><br>
+    
+    <h3>Imagen de fachada:</h3>
+    <input type="file" id="imagen1" accept="image/*"><br>
+
+    <h3>Imagenes del inmueble:</h3>
+    <input type="file" id="imagen1" accept="image/*"><br>
+    <input type="file" id="imagen2" accept="image/*"><br>
+    <input type="file" id="imagen3" accept="image/*"><br>
+    <input type="file" id="imagen4" accept="image/*"><br>
+    <input type="file" id="imagen5" accept="image/*"><br>
+    <input type="file" id="imagen6" accept="image/*"><br>
+    <input type="file" id="imagen7" accept="image/*"><br>
+
+    <button onclick="mostrarInfo()">Imprimir ficha</button>
+  </div>
+  <script>
+    function mostrarInfo() {
+      var texto1 = document.getElementById("texto1").value;
+      var texto2 = document.getElementById("texto2").value;
+      var texto3 = document.getElementById("texto3").value;
+
+      var imagenes = document.querySelectorAll('input[type="file"]');
+      var imagenesCargadas = [];
+
+      var contador = 0;
+
+      imagenes.forEach(function (imagenInput) {
+        var imagen = imagenInput.files[0];
+        if (imagen) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            imagenesCargadas.push(e.target.result);
+            contador++;
+            if (contador === imagenes.length) {
+              mostrarVentana(texto1, texto2, texto3, imagenesCargadas);
+            }
+          };
+          reader.readAsDataURL(imagen);
+        } else {
+          contador++;
+          if (contador === imagenes.length) {
+            mostrarVentana(texto1, texto2, texto3, imagenesCargadas);
+          }
+        }
+      });
+    }
+
+function mostrarVentana(texto1, texto2, texto3, imagenesCargadas) {
+  var nuevaVentana = window.open('', '', 'width=800,height=1080');
+  nuevaVentana.document.write('<!DOCTYPE html>');
+  nuevaVentana.document.write('<html>');
+  nuevaVentana.document.write('<head>');
+  nuevaVentana.document.write('<title>Información Ingresada</title>');
+  nuevaVentana.document.write('<style>');
+  // Estilos CSS para la ventana emergente
+  nuevaVentana.document.write('body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }');
+  nuevaVentana.document.write('#title-container { position: absolute; top: 20px; right: 20px; z-index: 9999; background-color: #151571; color: white; padding: 10px; border-radius: 5px; width: 250px; height: 100px; line-height: 40px; text-align: center; font-size: 1.5em; font-weight: bold; }');
+  nuevaVentana.document.write('#container { max-width: 800px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); position: relative; z-index: 1; }');
+  nuevaVentana.document.write('h2 { margin-top: 0; }');
+  nuevaVentana.document.write('.info-label { font-weight: bold; }');
+  nuevaVentana.document.write('.first-image-container { display: flex; align-items: flex-start; margin-bottom: 20px; }');
+  nuevaVentana.document.write('.first-image-container img { max-width: 200px; max-height: 200px; margin-right: 20px; }');
+  nuevaVentana.document.write('.first-image-container p { margin: 0; }');
+  nuevaVentana.document.write('.image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }');
+  nuevaVentana.document.write('img { max-width: 200px; max-height: 200px; }');
+  nuevaVentana.document.write('</style>');
+  nuevaVentana.document.write('</head>');
+  nuevaVentana.document.write('<body>');
+
+  nuevaVentana.document.write('<div id="title-container">INMUEBLE PARTICULAR</div>');
+  nuevaVentana.document.write('<div id="container">');
+  nuevaVentana.document.write('<div class="first-image-container">');
+  // Mostrar la primera imagen junto con el texto
+  if (imagenesCargadas.length > 0 && imagenesCargadas[0].startsWith('data:image')) {
+    nuevaVentana.document.write('<img src="' + imagenesCargadas[0] + '">');
+  }
+  nuevaVentana.document.write('<div>');
+  nuevaVentana.document.write('<p><span class="info-label">Habitaciones:</span> ' + texto1 + '</p>');
+  nuevaVentana.document.write('<p><span class="info-label">Baños:</span> ' + texto2 + '</p>');
+  nuevaVentana.document.write('<p><span class="info-label">Estacionamientos:</span> ' + texto3 + '</p>');
+  nuevaVentana.document.write('</div>');
+  nuevaVentana.document.write('</div>');
+
+  nuevaVentana.document.write('<h2>Vistas adicionales:</h2>');
+
+  // Mostrar imágenes restantes en una cuadrícula de 3 columnas y 2 filas
+  nuevaVentana.document.write('<div class="image-grid">');
+  for (var i = 1; i < imagenesCargadas.length; i++) {
+    if (imagenesCargadas[i].startsWith('data:image')) {
+      nuevaVentana.document.write('<img src="' + imagenesCargadas[i] + '">');
+    }
+  }
+  nuevaVentana.document.write('</div>');
+
+  nuevaVentana.document.write('</div>');
+
+  nuevaVentana.document.write('</body>');
+  nuevaVentana.document.write('</html>');
+}
+
+  </script>
+
+</body>
+</html>
+

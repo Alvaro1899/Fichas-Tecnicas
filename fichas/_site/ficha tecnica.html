@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style type="text/css">
+.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+    <meta charset="UTF-8">
+    <title>Generación de PDF</title>
+</head>
+<body>
+    <h1>Generador de PDF</h1>
+    
+    <form id="form">
+        <!-- Cuadros de entrada de texto -->
+        <input type="text" id="input1" placeholder="Texto 1">
+        <input type="text" id="input2" placeholder="Texto 2">
+        <input type="text" id="input3" placeholder="Texto 3">
+        
+        <!-- Campos para cargar imágenes -->
+        <input type="file" id="image1" accept="image/*">
+        <input type="file" id="image2" accept="image/*">
+        <input type="file" id="image3" accept="image/*">
+        <input type="file" id="image4" accept="image/*">
+        <input type="file" id="image5" accept="image/*">
+        <input type="file" id="image6" accept="image/*">
+        
+        <!-- Botón de acción para generar el PDF -->
+        <button type="button" onclick="generarPDF()">Generar PDF</button>
+    </form>
+    
+    <script>
+        function generarPDF() {
+            // Capturar los valores de los campos de texto
+            var texto1 = document.getElementById('input1').value;
+            var texto2 = document.getElementById('input2').value;
+            var texto3 = document.getElementById('input3').value;
+            
+            // Capturar las imágenes seleccionadas
+            var imagenes = [];
+            var inputsImagenes = document.querySelectorAll('input[type=file]');
+            inputsImagenes.forEach(function(input) {
+                if (input.files && input.files[0]) {
+                    imagenes.push(input.files[0]);
+                }
+            });
+            
+            // Crear un PDF con la información recopilada
+            // Aquí puedes usar alguna librería como jsPDF para generar el PDF
+            // La generación real del PDF dependerá de la librería que elijas utilizar
+            
+            // Ejemplo básico utilizando jsPDF
+            var doc = new jsPDF();
+            doc.text(20, 20, 'Texto 1: ' + texto1);
+            doc.text(20, 30, 'Texto 2: ' + texto2);
+            doc.text(20, 40, 'Texto 3: ' + texto3);
+            
+            // Mostrar las imágenes en el PDF (esto es un ejemplo básico)
+            var yPos = 50;
+            imagenes.forEach(function(imagen, index) {
+                yPos += 20;
+                doc.addImage(imagen, 'JPEG', 20, yPos, 50, 50);
+            });
+            
+            // Guardar el PDF o mostrarlo en el navegador (dependiendo de tu implementación)
+            doc.save('informacion.pdf');
+        }
+    </script>
+</body>
+</html>
